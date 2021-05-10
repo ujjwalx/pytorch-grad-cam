@@ -2,9 +2,9 @@ import cv2
 import numpy as np
 import torch
 import ttach as tta
-from pytorch_grad_cam.activations_and_gradients import ActivationsAndGradients
-from pytorch_grad_cam.utils.svd_on_activations import get_2d_projection
-
+from submodules.pytorch_grad_cam.activations_and_gradients import ActivationsAndGradients
+from submodules.pytorch_grad_cam.utils.svd_on_activations import get_2d_projection
+from icecream import ic
 
 class BaseCAM:
     def __init__(self, 
@@ -22,7 +22,7 @@ class BaseCAM:
             target_layer, reshape_transform)
 
     def forward(self, input_img):
-        return self.model(input_img)
+        return self.model(input_img)[0]
 
     def get_cam_weights(self,
                         input_tensor,
@@ -56,7 +56,7 @@ class BaseCAM:
         if self.cuda:
             input_tensor = input_tensor.cuda()
 
-        output = self.activations_and_grads(input_tensor)
+        output = self.activations_and_grads(input_tensor)[0]
 
         if type(target_category) is int:
             target_category = [target_category] * input_tensor.size(0)

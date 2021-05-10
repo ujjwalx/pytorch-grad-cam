@@ -1,3 +1,4 @@
+from icecream import ic
 class ActivationsAndGradients:
     """ Class for extracting activations and
     registering gradients from targetted intermediate layers """
@@ -13,6 +14,7 @@ class ActivationsAndGradients:
 
     def save_activation(self, module, input, output):
         activation = output
+
         if self.reshape_transform is not None:
             activation = self.reshape_transform(activation)
         self.activations.append(activation.cpu())

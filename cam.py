@@ -4,18 +4,17 @@ import numpy as np
 import torch
 from torchvision import models
 
-from pytorch_grad_cam import GradCAM, \
-                             ScoreCAM, \
-                             GradCAMPlusPlus, \
-                             AblationCAM, \
-                             XGradCAM, \
-                             EigenCAM, \
-                             EigenGradCAM
+from submodules.pytorch_grad_cam.grad_cam import GradCAM
+from submodules.pytorch_grad_cam.ablation_cam import AblationCAM
+from submodules.pytorch_grad_cam.xgrad_cam import XGradCAM
+from submodules.pytorch_grad_cam.grad_cam_plusplus import GradCAMPlusPlus
+from submodules.pytorch_grad_cam.score_cam import ScoreCAM
+from submodules.pytorch_grad_cam.eigen_cam import EigenCAM
+from submodules.pytorch_grad_cam.eigen_grad_cam import EigenGradCAM
+from submodules.pytorch_grad_cam.guided_backprop import GuidedBackpropReLUModel
 
-from pytorch_grad_cam import GuidedBackpropReLUModel
-from pytorch_grad_cam.utils.image import show_cam_on_image, \
-                                         deprocess_image, \
-                                         preprocess_image
+from submodules.pytorch_grad_cam.guided_backprop import GuidedBackpropReLUModel
+from submodules.pytorch_grad_cam.utils.image import show_cam_on_image, deprocess_image, preprocess_image
 
 def get_args():
     parser = argparse.ArgumentParser()
