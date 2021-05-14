@@ -1,7 +1,6 @@
-from icecream import ic
 class ActivationsAndGradients:
-    """ Class for extracting activations and
-    registering gradients from targetted intermediate layers """
+    """Class for extracting activations and
+    registering gradients from targetted intermediate layers"""
 
     def __init__(self, model, target_layer, reshape_transform):
         self.model = model
@@ -28,5 +27,6 @@ class ActivationsAndGradients:
 
     def __call__(self, x):
         self.gradients = []
-        self.activations = []        
+        self.activations = []
+        
         return self.model(x)

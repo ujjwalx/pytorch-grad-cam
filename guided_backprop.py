@@ -7,7 +7,9 @@ class GuidedBackpropReLU(Function):
     @staticmethod
     def forward(self, input_img):
         positive_mask = (input_img > 0).type_as(input_img)
-        output = torch.addcmul(torch.zeros(input_img.size()).type_as(input_img), input_img, positive_mask)
+        output = torch.addcmul(
+            torch.zeros(input_img.size()).type_as(input_img), input_img, positive_mask
+        )
         self.save_for_backward(input_img, output)
         return output
 
@@ -18,9 +20,15 @@ class GuidedBackpropReLU(Function):
 
         positive_mask_1 = (input_img > 0).type_as(grad_output)
         positive_mask_2 = (grad_output > 0).type_as(grad_output)
-        grad_input = torch.addcmul(torch.zeros(input_img.size()).type_as(input_img),
-                                   torch.addcmul(torch.zeros(input_img.size()).type_as(input_img), grad_output,
-                                                 positive_mask_1), positive_mask_2)
+        grad_input = torch.addcmul(
+            torch.zeros(input_img.size()).type_as(input_img),
+            torch.addcmul(
+                torch.zeros(input_img.size()).type_as(input_img),
+                grad_output,
+                positive_mask_1,
+            ),
+            positive_mask_2,
+        )
         return grad_input
 
 
@@ -29,13 +37,14 @@ class GuidedBackpropReLUModel:
         self.model = model
         self.model.eval()
         self.cuda = use_cuda
-        if self.cuda:
-            self.model = model.cuda()
+
+        device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+        self.model = model.to(device)
 
         def recursive_relu_apply(module_top):
             for idx, module in module_top._modules.items():
                 recursive_relu_apply(module)
-                if module.__class__.__name__ == 'ReLU':
+                if module.__class__.__name__ == "ReLU":
                     module_top._modules[idx] = GuidedBackpropReLU.apply
 
         # replace ReLU with GuidedBackpropReLU
@@ -46,7 +55,7 @@ class GuidedBackpropReLUModel:
 
     def __call__(self, input_img, target_category=None):
         if self.cuda:
-            input_img = input_img.cuda()
+            input_img = input_img.to(self.device)
 
         input_img = input_img.requires_grad_(True)
 
@@ -57,7 +66,8 @@ class GuidedBackpropReLUModel:
 
         one_hot = np.zeros((1, output.size()[-1]), dtype=np.float32)
         one_hot[0][target_category] = 1
-        one_hot = torch.from_numpy(one_hot).requires_grad_(True)
+        one_hot = torch.from_numpy(one_hot).requires_grad_(True).to(device)
+
         if self.cuda:
             one_hot = one_hot.cuda()
 
