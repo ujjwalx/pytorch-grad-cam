@@ -51,4 +51,9 @@ def show_cam_on_image(
     composite = heatmap + img
     composite = composite / np.max(composite)
 
-    return {"img" : img, "composite": np.uint8(255 * composite), "heatmap": heatmap}
+    return {
+        "img": img,
+        "composite": np.uint8(255 * composite),
+        "heatmap": heatmap,
+        "mask": mask,
+    }
