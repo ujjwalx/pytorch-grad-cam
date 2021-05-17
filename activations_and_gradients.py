@@ -28,5 +28,5 @@ class ActivationsAndGradients:
     def __call__(self, x):
         self.gradients = []
         self.activations = []
-        
+
         return self.model(x)
