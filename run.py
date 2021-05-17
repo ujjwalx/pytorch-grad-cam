@@ -64,8 +64,8 @@ def run_cam(
     grayscale_cam = cam(
         input_tensor=input_tensor,
         target_category=target_category,
-        aug_smooth=aug_smooth,
-        eigen_smooth=eigen_smooth,
+        aug_smooth=True,
+        eigen_smooth=False,
     )
 
     # Here grayscale_cam has only one image in the batch
@@ -77,7 +77,7 @@ def run_cam(
     normalized_rgb_img = np.float32(normalized_rgb_img)/255
 
     # overlay cam image onto the original image.
-    results = show_cam_on_image(normalized_rgb_img, grayscale_cam)
+    results = show_cam_on_image(normalized_rgb_img, grayscale_cam, use_rgb=True)
 
     return results
 
