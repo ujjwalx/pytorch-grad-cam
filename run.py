@@ -64,8 +64,8 @@ def run_cam(
     grayscale_cam = cam(
         input_tensor=input_tensor,
         target_category=target_category,
-        aug_smooth=True,
-        eigen_smooth=False,
+        aug_smooth=aug_smooth,
+        eigen_smooth=eigen_smooth,
     )
 
     # Here grayscale_cam has only one image in the batch
