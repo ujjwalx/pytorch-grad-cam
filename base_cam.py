@@ -13,7 +13,13 @@ from compress_pickle import load
 
 
 class BaseCAM:
-    def __init__(self, model, target_layer, use_cuda=False, reshape_transform=None):
+    def __init__(
+        self,
+        model,
+        target_layer,
+        use_cuda=False,
+        reshape_transform=None,
+    ):
         self.model = model.eval()
         self.target_layer = target_layer
         self.cuda = use_cuda
@@ -49,7 +55,12 @@ class BaseCAM:
             cam = weighted_activations.sum(axis=1)
         return cam
 
-    def forward(self, input_tensor, target_category=None, eigen_smooth=False):
+    def forward(
+        self,
+        input_tensor,
+        target_category=None,
+        eigen_smooth=False,
+    ):
 
         if self.cuda:
             input_tensor = input_tensor.cuda()
